@@ -1,8 +1,11 @@
 package com.sankuai.mdp.producer.mq.producer;
 
+import com.meituan.mafka.client.bean.MafkaProducer;
 import com.meituan.mafka.client.producer.IProducerProcessor;
 import com.meituan.mafka.client.producer.ProducerResult;
 import com.meituan.mafka.client.producer.ProducerStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -19,11 +22,13 @@ import javax.annotation.Resource;
  */
 @Service
 public class DemoProducer_1 {
-    @Resource(name = "DemoProducer")
+    @Autowired
+    @Qualifier("DemoProducer")
     private IProducerProcessor mafkaProducer;
 
-    public void send(Long mis) throws Exception{
-        ProducerResult producerResult = mafkaProducer.sendMessage(mis);
-        Assert.isTrue(producerResult.getProducerStatus().equals(ProducerStatus.SEND_OK),"发送异常");
+    public void send(String msg) throws Exception {
+        // TODO:业务侧的发送消息逻辑代码
+        ProducerResult producerResult = mafkaProducer.sendMessage("send sync message "+ msg);
+        System.out.println("send " + msg + " status: " + producerResult.getProducerStatus());
     }
 }

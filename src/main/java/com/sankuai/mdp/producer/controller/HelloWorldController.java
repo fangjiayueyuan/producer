@@ -1,5 +1,6 @@
 package com.sankuai.mdp.producer.controller;
 
+import com.meituan.mafka.client.consumer.ConsumeStatus;
 import com.sankuai.mdp.producer.mq.consumer.DemoConsumer_1;
 import com.sankuai.mdp.producer.mq.producer.DemoProducer_1;
 import lombok.SneakyThrows;
@@ -11,7 +12,6 @@ import javax.annotation.Resource;
 
 @RestController
 public class HelloWorldController {
-
     @Resource
     private DemoProducer_1 Dproducer;
 
@@ -23,14 +23,13 @@ public class HelloWorldController {
         return "Hello "+mis;
     }
 
-    @SneakyThrows
     @GetMapping("/api/send")
-    public void send(@RequestParam Long mis ){
-        Dproducer.send(mis);
+    public void send(@RequestParam String msg) throws Exception {
+        Dproducer.send(msg);
     }
 
     @GetMapping("api/receive")
-    public Long rev(Long mis){
-        return Dconsumer.temp;
+    public ConsumeStatus rev(String msg){
+        return Dconsumer.receive(msg);
     }
 }
